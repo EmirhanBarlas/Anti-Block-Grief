@@ -2,7 +2,5 @@
 # Here you can define protected blocks
 
 protectedBlocks:
-  - DIAMOND_BLOCK
-  - EMERALD_BLOCK
-  - GOLD_BLOCK
+  - ARMOR_STAND
 # You can add the list of protected blocks here

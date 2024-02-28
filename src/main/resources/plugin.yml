@@ -2,3 +2,9 @@ name: antiblock
 version: '${project.version}'
 main: org.splendid.antiblock.Antiblock
 api-version: '1.20'
+author: _Barlas_
+commands:
+  antiblockreload:
+    description: Antiblock config dosyasını yeniler
+    usage: /antiblockreload
+    permission: antiblock.reload

@@ -15,46 +15,21 @@ import java.util.List;
 
 public final class Antiblock extends JavaPlugin {
 
-    public class BlockListener implements Listener {
-
-        private final JavaPlugin plugin;
-        private final FileConfiguration config;
-
-        public BlockListener(JavaPlugin plugin) {
-            this.plugin = plugin;
-            this.config = plugin.getConfig();
-        }
+    private final FileConfiguration config = getConfig();
 
     public void onEnable() {
-        getLogger().info("Antiblock enabled!");
-        getConfig().options().copyDefaults(true);
+        getLogger().info("Antiblock enabled!" + ChatColor.WHITE + "Blocks that players are prohibited from breaking: " + ChatColor.YELLOW + getProtectedBlocks().toString());
+        config.options().copyDefaults(true);
         saveDefaultConfig();
-        getServer().getPluginManager().registerEvents(new BlockListener(this), this);
+        getServer().getPluginManager().registerEvents(new BlockListener(this, config), this);
     }
+
     public void onDisable() {
-        getLogger().info("Antiblock disabled!");
+        getLogger().info("Antiblock disabled!" + getProtectedBlocks().toString());
     }
 
-        @EventHandler
-        public void onBlockPlace(BlockPlaceEvent event) {
-            Player player = event.getPlayer();
-            if (config.getStringList("protectedBlocks").contains(event.getBlockPlaced().getType().toString())) {
-                event.setCancelled(true);
-                String rawMessage = config.getString("blockPlaceError");
-                String coloredMessage = ChatColor.translateAlternateColorCodes('&', rawMessage);
-                player.sendMessage(coloredMessage);
-            }
-        }
-
-    @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        if (config.getStringList("protectedBlocks").contains(event.getBlock().getType().toString())) {
-            event.setCancelled(true);
-            String rawMessage = config.getString("blockBreakError");
-            String coloredMessage = ChatColor.translateAlternateColorCodes('&', rawMessage);
-            player.sendMessage(coloredMessage);
-        }
+    public List<String> getProtectedBlocks() {
+        return config.getStringList("protectedBlocks");
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -69,8 +44,37 @@ public final class Antiblock extends JavaPlugin {
         }
         return false;
     }
-    public List<String> getProtectedBlocks() {
-        return getConfig().getStringList("protectedBlocks");
-    }
+
+    public class BlockListener implements Listener {
+
+        private final JavaPlugin plugin;
+        private final FileConfiguration config;
+
+        public BlockListener(JavaPlugin plugin, FileConfiguration config) {
+            this.plugin = plugin;
+            this.config = config;
+        }
+
+        @EventHandler
+        public void onBlockPlace(BlockPlaceEvent event) {
+            Player player = event.getPlayer();
+            if (config.getStringList("protectedBlocks").contains(event.getBlockPlaced().getType().toString())) {
+                event.setCancelled(true);
+                String rawMessage = config.getString("blockPlaceError");
+                String coloredMessage = ChatColor.translateAlternateColorCodes('&', rawMessage);
+                player.sendMessage(coloredMessage);
+            }
+        }
+
+        @EventHandler
+        public void onBlockBreak(BlockBreakEvent event) {
+            Player player = event.getPlayer();
+            if (config.getStringList("protectedBlocks").contains(event.getBlock().getType().toString())) {
+                event.setCancelled(true);
+                String rawMessage = config.getString("blockBreakError");
+                String coloredMessage = ChatColor.translateAlternateColorCodes('&', rawMessage);
+                player.sendMessage(coloredMessage);
+            }
+        }
     }
 }

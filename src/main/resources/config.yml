@@ -3,4 +3,7 @@
 
 protectedBlocks:
   - ARMOR_STAND
-# You can add the list of protected blocks here
+  # You can add the list of protected blocks here
+
+blockPlaceError: "&cYou cannot place this block!"
+blockBreakError: "&cYou cannot break this block!"

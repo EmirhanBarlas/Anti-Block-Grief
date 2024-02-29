@@ -1,29 +1,62 @@
 package org.splendid.antiblock;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.ChatColor;
 
 import java.util.List;
 
 public final class Antiblock extends JavaPlugin {
 
-    @Override
+    public class BlockListener implements Listener {
+
+        private final JavaPlugin plugin;
+        private final FileConfiguration config;
+
+        public BlockListener(JavaPlugin plugin) {
+            this.plugin = plugin;
+            this.config = plugin.getConfig();
+        }
+
     public void onEnable() {
         getLogger().info("Antiblock enabled!");
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
+        getServer().getPluginManager().registerEvents(new BlockListener(this), this);
     }
-
-    @Override
     public void onDisable() {
         getLogger().info("Antiblock disabled!");
     }
 
-    @Override
+        @EventHandler
+        public void onBlockPlace(BlockPlaceEvent event) {
+            Player player = event.getPlayer();
+            if (config.getStringList("protectedBlocks").contains(event.getBlockPlaced().getType().toString())) {
+                event.setCancelled(true);
+                String rawMessage = config.getString("blockPlaceError");
+                String coloredMessage = ChatColor.translateAlternateColorCodes('&', rawMessage);
+                player.sendMessage(coloredMessage);
+            }
+        }
+
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        if (config.getStringList("protectedBlocks").contains(event.getBlock().getType().toString())) {
+            event.setCancelled(true);
+            String rawMessage = config.getString("blockBreakError");
+            String coloredMessage = ChatColor.translateAlternateColorCodes('&', rawMessage);
+            player.sendMessage(coloredMessage);
+        }
+    }
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (label.equalsIgnoreCase("antiblockreload")) {
             if (sender.hasPermission("antiblock.reload")) {
@@ -38,5 +71,6 @@ public final class Antiblock extends JavaPlugin {
     }
     public List<String> getProtectedBlocks() {
         return getConfig().getStringList("protectedBlocks");
+    }
     }
 }

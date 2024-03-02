@@ -8,3 +8,15 @@ commands:
     description: Antiblock reload command (antiblock.reload)
     usage: /antiblockreload
     permission: antiblock.reload
+  antiblockinfo:
+    description: Antiblock info command (antiblock.info)
+    usage: /antiblockinfo
+    permission: antiblock.info
+  antiblockhelp:
+    description: antiblock help command (antiblock.help)
+    usage: /antiblockhelp
+    permission: antiblock.help
+  antiblockbypass:
+    description: antiblock toggle command (antiblock.bypass)
+    usage: /antiblockbypass
+    permission: antiblock.bypass

@@ -7,3 +7,7 @@ protectedBlocks:
 
 blockPlaceError: "&cYou cannot place this block!"
 blockBreakError: "&cYou cannot break this block!"
+
+messages:
+  noBlockedBlocks: "&aNo blocks are blocked."
+  blockedBlocksHeader: "&eBlocked blocks:"

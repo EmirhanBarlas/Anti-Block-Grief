@@ -45,6 +45,23 @@ public final class Antiblock extends JavaPlugin {
         return false;
     }
 
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("antiblockinfo")) {
+            FileConfiguration config = getConfig();
+            List<String> blockedBlocks = config.getStringList("blockedBlocks");
+
+            if (blockedBlocks.isEmpty()) {
+                sender.sendMessage(config.getString("messages.noBlockedBlocks"));
+            } else {
+                sender.sendMessage(config.getString("messages.blockedBlocksHeader"));
+                for (String blockedBlock : blockedBlocks) {
+                    sender.sendMessage(blockedBlock);
+                }
+            }
+            return true;
+        }
+        return false;
+    }
     public class BlockListener implements Listener {
 
         private final JavaPlugin plugin;

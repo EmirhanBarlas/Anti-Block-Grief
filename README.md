@@ -5,6 +5,9 @@ Anti-Block-Grief is a lightweight plugin for Minecraft servers designed to preve
 ## Permissions
 
 - `antiblock.reload` - Allows players to reload the plugin's configuration.
+- `antiblock.info` - Antiblock info command (antiblock.info).
+- `antiblock.help` - antiblock help command (antiblock.help).
+- `antiblock.bypass` - antiblock toggle command (antiblock.bypass), bypass for ops.
 
 ## Features
 

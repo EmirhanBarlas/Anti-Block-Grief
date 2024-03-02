@@ -32,19 +32,44 @@ public final class Antiblock extends JavaPlugin {
         return config.getStringList("protectedBlocks");
     }
 
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (label.equalsIgnoreCase("antiblockreload")) {
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("antiblockinfo")) {
+            FileConfiguration config = getConfig();
+            List<String> blockedBlocks = config.getStringList("blockedBlocks");
+            if (blockedBlocks.isEmpty()) {
+                sender.sendMessage(config.getString("messages.noBlockedBlocks"));
+            } else {
+                sender.sendMessage(config.getString("messages.blockedBlocksHeader"));
+                for (String blockedBlock : blockedBlocks) {
+                    sender.sendMessage(blockedBlock);
+                }
+            }
+            return true;
+        } else if (cmd.getName().equalsIgnoreCase("antiblockhelp")) {
+            sender.sendMessage("Antiblock plugin commands:");
+            sender.sendMessage("/antiblockinfo - Shows blocked blocks");
+            sender.sendMessage("/antiblockhelp - Shows help message");
+            sender.sendMessage("/antiblockreload - Reloads config file");
+            sender.sendMessage("/antiblockbypass - Toggles bypass");
+            return true;
+        } else if (cmd.getName().equalsIgnoreCase("antiblockbypass")) {
+            if (sender.isOp()) {
+                sender.sendMessage("Bypass operation is successful.");
+            } else {
+                sender.sendMessage("You must be op to use this command.");
+            }
+            return true;
+        } else if (cmd.getName().equalsIgnoreCase("antiblockreload")) {
             if (sender.hasPermission("antiblock.reload")) {
                 reloadConfig();
-                sender.sendMessage("Antiblock config dosyası yenilendi!");
+                sender.sendMessage("Antiblock config file has been renewed!");
             } else {
-                sender.sendMessage("Bu komutu kullanma izniniz yok!");
+                sender.sendMessage("You do not have permission to use this command!");
             }
             return true;
         }
         return false;
     }
-
     public class BlockListener implements Listener {
 
         private final JavaPlugin plugin;
